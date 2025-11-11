@@ -41,6 +41,9 @@ else
     error "Unsupported operating system: $OS"
 fi
 
+chmod +x ./generic/install_all.sh
+./generic/install_all.sh
+
 info "Dependencies installed successfully."
 
 # --- GPG Key Import ---
