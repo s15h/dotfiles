@@ -6,6 +6,7 @@ discord \
 firefox \
 git \
 gnupg2 \
+hyprland \
 neovim \
 openvpn \
 pcscd \
