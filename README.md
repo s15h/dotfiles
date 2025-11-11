@@ -1,8 +1,9 @@
 # dotfiles
 
 ## todo
-- [ ] Add script setting up git
-- [ ] Add install script for wanted software
+- [ ] Add install script for wanted software for debian
+- [ ] Add install script for wanted software for Arch
+- [ ] Add script for setting up dotfiles with stow
 - [ ] Add script for cloning essential repositories
 - [ ] Add dotfiles for zsh / ohmyzsh
 - ~/.oh-my-zsh/custom/aliases.zsh
@@ -13,7 +14,6 @@
 - ~/project/dignitas/.gitconfig
 - [ ] Add dotfiles for openvpn
 - ~/.openvpn/template-vpn.sh
-- [ ] add install for font 'PT mono'
 
 ## wanted software
 
@@ -31,7 +31,6 @@
 - [ ] discord
 - [ ] firefox
 - [ ] chromium
-- [ ] ladybird
 - [ ] obsidian
 - [ ] neovim
 - [ ] Zed
@@ -50,6 +49,10 @@
 - [ ] bruno
 - [ ] Ghostty
 - [ ] Tmux
+- [ ] font 'PT mono'
+
+## future wishlist
+- [ ] Ladybird
 
 ## Project structure
 
