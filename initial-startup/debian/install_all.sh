@@ -20,3 +20,7 @@ zsh
 # install docker
 chmod +x ./debian/install_docker.sh
 ./debian/install_docker.sh
+
+# install spotify
+chmod +x ./debian/install_spotify.sh
+./debian/install_spotify.sh
