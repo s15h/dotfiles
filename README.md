@@ -17,7 +17,7 @@
 
 ## wanted software
 
-- [ ] bitwarden cli
+- [x] bitwarden cli
 - [ ] docker
 - [ ] git
 - [ ] gnupg
@@ -25,7 +25,7 @@
 - [ ] openvpn
 - [ ] ssh
 - [ ] zsh
-- [ ] ohmyzsh
+- [x] ohmyzsh
 - [ ] hyprland
 - [ ] spotify
 - [ ] discord
