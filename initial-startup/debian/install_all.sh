@@ -2,8 +2,6 @@ sudo apt update
 
 sudo apt install -y \
 chromium-browser \
-discord \
-firefox \
 git \
 gnupg2 \
 hyprland \
