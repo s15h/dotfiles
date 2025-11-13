@@ -18,20 +18,20 @@
 ## wanted software
 
 - [x] bitwarden cli
-- [ ] docker
-- [ ] git
-- [ ] gnupg
-- [ ] jetbrains toolbox
-- [ ] openvpn
-- [ ] ssh
-- [ ] zsh
+- [ ] docker -  debian done
+- [ ] git -  debian done
+- [ ] gnupg -  debian done
+- [ ] jetbrains toolbox - tar download with version in url
+- [ ] openvpn -  debian done
+- [ ] ssh -  debian done
+- [ ] zsh -  debian done
 - [x] ohmyzsh
-- [ ] hyprland
-- [ ] spotify
-- [ ] discord
-- [ ] firefox
-- [ ] chromium
-- [ ] obsidian
+- [ ] hyprland -  debian done
+- [ ] spotify -  debian done
+- [ ] discord -  debian done
+- [ ] firefox -  debian done
+- [ ] chromium -  debian done
+- [x] obsidian
 - [ ] neovim
 - [ ] Zed
 - [ ] fastfetch
