@@ -35,16 +35,13 @@
 - [ ] neovim - debian done
 - [ ] fastfetch - debian done
 - [ ] waybar - debian done
-- [ ] pcsclite
-- [ ] ccid 
-- [ ] yubikey-personalization
 - [ ] Java in docker
 - [ ] nodejs in docker
 - [ ] composer in docker
 - [ ] php in docker
 - [ ] python in docker
 - [ ] pip in docker
-- [ ] bruno
+- [x] bruno
 - [ ] Ghostty
 - [ ] Tmux
 - [ ] font 'PT mono'
