@@ -5,6 +5,13 @@ else
   echo "Bitwarden CLI already installed."
 fi
 
+#install obsidian flatpack
+if [ ! -f /usr/bin/obsidian ]; then
+  flatpak install flathub com.obsidian.Obsidian
+else
+  echo "Obsidian already installed."
+fi
+
 # install oh my zsh
 if [ ! -d ~/.oh-my-zsh ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
