@@ -1,8 +1,0 @@
-[user]
-	signingkey = 0xEF527BD39924885B
-	email = sietze@s15h.nl
-	name = Sietze van den Bergh
-[commit]
-	gpgsign = true
-[pull]
-	rebase = true

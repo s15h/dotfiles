@@ -1,0 +1,25 @@
+[user]
+	signingkey = A5396EB208B1AF337D9CCF8D462680667361F6A4
+	email = sietze@s15h.nl
+	name = Sietze van den Bergh
+[pull]
+	rebase = true
+[commit]
+	gpgsign = true
+[fetch]
+	prune = true
+[init]
+	defaultBranch = main
+[branch]
+	sort = -committerdate
+[log]
+	date = iso
+[push]
+	autoSetupRemote = true
+[rerere]
+	enabled = true
+	autoUpdate = true
+[includeIf "gitdir/i:~/project/dignitas/"]
+	path = ~/project/dignitas/.gitconfig
+[core]
+	autocrlf = input

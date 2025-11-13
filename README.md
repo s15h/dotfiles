@@ -1,17 +1,8 @@
 # dotfiles
 
 ## todo
-- [ ] Add install script for wanted software for debian
 - [ ] Add install script for wanted software for Arch
-- [ ] Add script for setting up dotfiles with stow
 - [ ] Add script for cloning essential repositories
-- [ ] Add dotfiles for zsh / ohmyzsh
-- ~/.oh-my-zsh/custom/aliases.zsh
-- ~/.oh-my-zsh/custom/gpg.zsh
-- ~/.zshrc
-- [ ] Add dotfiles for git
-- ~/.gitconfig
-- ~/project/dignitas/.gitconfig
 - [ ] Add dotfiles for openvpn
 - ~/.openvpn/template-vpn.sh
 
@@ -42,8 +33,8 @@
 - [ ] python in docker
 - [ ] pip in docker
 - [x] bruno
-- [ ] Ghostty
-- [ ] Tmux
+- [ ] Ghostty - debian done
+- [ ] Tmux - debian done
 - [ ] font 'PT mono'
 
 ## future wishlist

@@ -12,6 +12,7 @@ pcscd \
 pcsc-tools \
 pinentry-tty \
 openssh-client \
+stow \
 tmux \
 waybar \
 yubikey-manager \
