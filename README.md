@@ -34,8 +34,7 @@
 - [x] obsidian
 - [ ] neovim - debian done
 - [ ] fastfetch - debian done
-- [ ] wofi
-- [ ] waybar
+- [ ] waybar - debian done
 - [ ] pcsclite
 - [ ] ccid 
 - [ ] yubikey-personalization
