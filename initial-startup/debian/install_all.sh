@@ -13,6 +13,7 @@ pcsc-tools \
 pinentry-tty \
 openssh-client \
 tmux \
+waybar \
 yubikey-manager \
 zsh
 
