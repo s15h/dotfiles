@@ -29,11 +29,11 @@
 - [ ] hyprland -  debian done
 - [ ] spotify -  debian done
 - [x] discord
-- [ ] firefox -  debian done
+- [x] firefox
 - [ ] chromium -  debian done
 - [x] obsidian
 - [ ] neovim - debian done
-- [ ] fastfetch
+- [ ] fastfetch - debian done
 - [ ] wofi
 - [ ] waybar
 - [ ] pcsclite
