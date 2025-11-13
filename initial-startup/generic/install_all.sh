@@ -1,5 +1,13 @@
 # install bitwarden cli
-flatpak install flathub com.bitwarden.desktop
+if [ ! -f /usr/bin/bw ]; then
+  flatpak install flathub com.bitwarden.desktop
+else
+  echo "Bitwarden CLI already installed."
+fi
 
 # install oh my zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+if [ ! -d ~/.oh-my-zsh ]; then
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+else
+  echo "Oh My Zsh already installed."
+fi
