@@ -28,7 +28,7 @@ fi
 
 #install obsidian flatpack
 if [ ! -f /usr/bin/obsidian ]; then
-  flatpak install flathub com.obsidian.Obsidian
+  flatpak install flathub md.obsidian.Obsidian
 else
   echo "Obsidian already installed."
 fi
