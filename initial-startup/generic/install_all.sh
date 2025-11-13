@@ -12,6 +12,12 @@ else
   echo "Discord already installed."
 fi
 
+if [ ! -f /usr/bin/firefox ]; then
+  flatpak install flathub org.mozilla.Firefox
+else
+  echo "Firefox already installed."
+fi
+
 #install obsidian flatpack
 if [ ! -f /usr/bin/obsidian ]; then
   flatpak install flathub com.obsidian.Obsidian
