@@ -2,6 +2,7 @@ sudo apt update
 
 sudo apt install -y \
 chromium-browser \
+fastfetch \
 git \
 gnupg2 \
 hyprland \
