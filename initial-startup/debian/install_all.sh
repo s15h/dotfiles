@@ -17,11 +17,6 @@ tmux \
 yubikey-manager \
 zsh
 
-# install discord
-echo "Installing discord"
-chmod +x ./debian/install_discord.sh
-./debian/install_discord.sh
-
 # install docker
 echo "Installing docker"
 chmod +x ./debian/install_docker.sh
