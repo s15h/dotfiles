@@ -53,3 +53,11 @@ if curl -sL https://github.com/s15h.gpg | gpg --import -; then
 else
     error "Failed to import GPG key."
 fi
+
+# --- Stow configs ---
+if [ ! -d ~/fonts ]; then
+    mkdir ~/fonts
+fi
+
+cd ../
+stow -vv  -t ~ configs
