@@ -28,12 +28,11 @@
 - [x] ohmyzsh
 - [ ] hyprland -  debian done
 - [ ] spotify -  debian done
-- [ ] discord -  debian done
+- [x] discord
 - [ ] firefox -  debian done
 - [ ] chromium -  debian done
 - [x] obsidian
-- [ ] neovim
-- [ ] Zed
+- [ ] neovim - debian done
 - [ ] fastfetch
 - [ ] wofi
 - [ ] waybar

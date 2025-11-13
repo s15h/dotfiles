@@ -5,6 +5,13 @@ else
   echo "Bitwarden CLI already installed."
 fi
 
+# install discord
+if [ ! -f /usr/bin/discord ]; then
+  flatpak install flathub com.discordapp.Discord
+else
+  echo "Discord already installed."
+fi
+
 #install obsidian flatpack
 if [ ! -f /usr/bin/obsidian ]; then
   flatpak install flathub com.obsidian.Obsidian
