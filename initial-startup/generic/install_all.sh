@@ -33,6 +33,13 @@ else
   echo "Obsidian already installed."
 fi
 
+# Install zed
+if [ ! -f /usr/bin/zed ]; then
+  curl -f https://zed.dev/install.sh | sh
+else
+  echo "Zed already installed."
+fi
+
 # install oh my zsh
 if [ ! -d ~/.oh-my-zsh ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
