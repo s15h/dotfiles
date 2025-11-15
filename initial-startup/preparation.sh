@@ -61,3 +61,8 @@ fi
 
 cd ../
 stow -vv  -t ~ configs
+
+
+info "Clone repositories..."
+chmod +x ./generic/clone_repositories.sh
+./generic/clone_repositories.sh
