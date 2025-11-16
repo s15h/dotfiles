@@ -33,7 +33,7 @@ else
   echo "Obsidian already installed."
 fi
 
-# Install zed
+# Install zed @TODO Detection invalid on arch
 if [ ! -f /usr/bin/zed ]; then
   curl -f https://zed.dev/install.sh | sh
 else

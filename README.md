@@ -1,5 +1,8 @@
 # dotfiles
 
+step 1: `git clone https://github.com/s15h/dotfiles.git`
+step 2: `dotfiles/initial-startup/preperation.sh`
+
 ## todo
 - [ ] Add install script for wanted software for Arch
 - [ ] Add script for cloning essential repositories

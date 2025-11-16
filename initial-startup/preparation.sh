@@ -32,7 +32,8 @@ info "Detecting package manager and installing dependencies..."
 
 if [[ "$OS" == "arch" || "$ID_LIKE" == "arch" ]]; then
     info "Arch Linux detected."
-    sudo pacman -Syu --noconfirm --needed git gnupg pcsclite yubikey-manager openssh pinentry zsh docker openvpn discord firefox chromium neovim fastfetch wofi waybar ccid yubikey-personalization tmux
+    chmod +x ./arch/install_all.sh
+    ./arch/install_all.sh
 elif [[ "$OS" == "debian" || "$OS" == "ubuntu" || "$ID_LIKE" == "debian" || "$ID_LIKE" == "ubuntu" ]]; then
     info "Debian-based system detected."
     chmod +x ./debian/install_all.sh
@@ -62,7 +63,7 @@ fi
 cd ../
 stow -vv  -t ~ configs
 
-
+cd ~/"$(dirname "$0")"
 info "Clone repositories..."
 chmod +x ./generic/clone_repositories.sh
 ./generic/clone_repositories.sh
