@@ -15,8 +15,7 @@ cd ~/
 git clone git@github.com:s15h/default-repositories.git
 
 # get list of private from file
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPO_LIST="$SCRIPT_DIR/default-repositories/private.txt"
+REPO_LIST="$HOME/default-repositories/private.txt"
 if [ ! -f "$REPO_LIST" ]; then
     echo "[ERROR] Repository list file not found: $REPO_LIST"
     exit 1
@@ -31,7 +30,7 @@ else
   done < $REPO_LIST
 fi
 
-REPO_LIST="$SCRIPT_DIR/default-repositories/dignitas.txt"
+REPO_LIST="$HOME/default-repositories/dignitas.txt"
 if [ ! -f "$REPO_LIST" ]; then
     echo "[ERROR] Repository list file not found: $REPO_LIST"
     exit 1
