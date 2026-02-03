@@ -1,3 +1,10 @@
+#!/usr/bin/env zsh
+
+# Ensure zsh-based GPG/SSH agent config is loaded for git clone.
+if [[ -r "$HOME/.oh-my-zsh/custom/gpg.zsh" ]]; then
+  source "$HOME/.oh-my-zsh/custom/gpg.zsh"
+fi
+
 # get fingerprint of github key
 ssh-keyscan github.com >> ~/.ssh/known_hosts
 
