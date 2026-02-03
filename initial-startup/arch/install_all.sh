@@ -4,6 +4,7 @@ sudo pacman -Syu --noconfirm --needed \
   docker \
   fastfetch \
   firefox \
+  flatpak \
   git \
   gnupg \
   neovim \
