@@ -1,5 +1,7 @@
 # dotfiles
 
+## installation
+Step 0: insert yubikey
 step 1: `git clone https://github.com/s15h/dotfiles.git`
 step 2: `dotfiles/initial-startup/preperation.sh`
 
