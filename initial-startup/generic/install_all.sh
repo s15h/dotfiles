@@ -35,13 +35,8 @@ fi
 
 # install oh my zsh
 if [ ! -d ~/.oh-my-zsh ]; then
-  RUNZSH=no
-  OVERWRITE_CONFIRMATION=no
-
-  export RUNZSH
-  export OVERWRITE_CONFIRMATION
-
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  RUNZSH=no OVERWRITE_CONFIRMATION=no \
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else
   echo "Oh My Zsh already installed."
 fi
