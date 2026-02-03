@@ -1,3 +1,6 @@
+# get fingerprint of github key
+ssh-keyscan github.com >> ~/.ssh/known_hosts
+
 # clone private repositories
 git clone git@github.com:s15h/default-repositories.git
 
