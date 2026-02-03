@@ -5,8 +5,9 @@ if [[ -r "$HOME/.oh-my-zsh/custom/gpg.zsh" ]]; then
   source "$HOME/.oh-my-zsh/custom/gpg.zsh"
 fi
 
-# get fingerprint of github key
+# get fingerprint of github and azure devops
 ssh-keyscan github.com >> ~/.ssh/known_hosts
+ssh-keyscan ssh.dev.azure.com >> ~/.ssh/known_hosts
 
 # go to root level of project
 cd ~/
