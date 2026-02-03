@@ -6,8 +6,10 @@ if [[ -r "$HOME/.oh-my-zsh/custom/gpg.zsh" ]]; then
 fi
 
 # get fingerprint of github and azure devops
-ssh-keyscan github.com >> ~/.ssh/known_hosts
-ssh-keyscan ssh.dev.azure.com >> ~/.ssh/known_hosts
+mkdir -p "$HOME/.ssh"
+touch "$HOME/.ssh/known_hosts"
+ssh-keyscan github.com >> "$HOME/.ssh/known_hosts"
+ssh-keyscan ssh.dev.azure.com >> "$HOME/.ssh/known_hosts"
 
 # go to root level of project
 cd ~/
