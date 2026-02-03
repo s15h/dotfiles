@@ -1,49 +1,18 @@
 # dotfiles
 
+Dotfiles for debian and arch
+Tested on debian and omarchy
+
+
 ## installation
 Step 0: insert yubikey
 step 1: `git clone https://github.com/s15h/dotfiles.git`
 step 2: `dotfiles/initial-startup/preperation.sh`
 
 ## todo
-- [ ] Add install script for wanted software for Arch
-- [ ] Add script for cloning essential repositories
+- [ ] Add cloning games/s15h repositories
 - [ ] Add dotfiles for openvpn
 - ~/.openvpn/template-vpn.sh
-
-## wanted software
-
-- [x] bitwarden cli
-- [ ] docker -  debian done
-- [ ] git -  debian done
-- [ ] gnupg -  debian done
-- [ ] jetbrains toolbox - tar download with version in url
-- [ ] openvpn -  debian done
-- [ ] ssh -  debian done
-- [ ] zsh -  debian done
-- [x] ohmyzsh
-- [ ] hyprland -  debian done
-- [ ] spotify -  debian done
-- [x] discord
-- [x] firefox
-- [ ] chromium -  debian done
-- [x] obsidian
-- [ ] neovim - debian done
-- [ ] fastfetch - debian done
-- [ ] waybar - debian done
-- [ ] Java in docker
-- [ ] nodejs in docker
-- [ ] composer in docker
-- [ ] php in docker
-- [ ] python in docker
-- [ ] pip in docker
-- [x] bruno
-- [ ] Ghostty - debian done
-- [ ] Tmux - debian done
-- [ ] font 'PT mono'
-
-## future wishlist
-- [ ] Ladybird
 
 ## Project structure
 
@@ -53,22 +22,6 @@ step 2: `dotfiles/initial-startup/preperation.sh`
   - curriculum-vitae
   - zettelkasten
   - homelab
-- students
-  - *current school year* (ex 2025-2026)
-    - wp1
-    - wp2
-    - wp3
-    - wp4
-- workshops
-    - wp1
-    - wp2
-    - wp3
-    - wp4
-- presentations
-    - wp1
-    - wp2
-    - wp3
-    - wp4
 - dignitas
     - own git config
 - s15h
@@ -78,7 +31,7 @@ step 2: `dotfiles/initial-startup/preperation.sh`
     - openraam
 
 ## Yubikey ssh
-To use yubikey as ssh you need to add this to:
+To use yubikey as ssh this is added in the .zshrc
 
 ```
 export GPG_TTY="$(tty)"
@@ -86,16 +39,6 @@ SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
 export SSH_AUTH_SOCK
 gpgconf --launch gpg-agent
 ```
-
-Import the public key with
-``gpg --import gpg-publickey``
-
-Validate with ``gpg --import gpg-publickey``
-
-part from the .bashrc file to your own .bashrc file
-
-You will also need scdeamon to be installed
-
 
 ## remaining setup
 ### ssh in jetbrains ui
