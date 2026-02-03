@@ -46,4 +46,4 @@ else
   done < $REPO_LIST
 fi
 
-rm -rf "$SCRIPT_DIR"/default-repositories
+rm -rf "$HOME"/default-repositories
