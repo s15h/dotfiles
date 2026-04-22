@@ -1,5 +1,5 @@
 # dotfiles
-
+test
 Dotfiles for debian and arch
 Tested on debian and omarchy
 
