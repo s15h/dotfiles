@@ -90,6 +90,18 @@ if [ -d "$PROJECT_CONFIG_DIR" ]; then
     done
 fi
 
+BASH_GPG_HOOK_START="# dotfiles-gpg-agent-start"
+if ! grep -qF "$BASH_GPG_HOOK_START" "$HOME/.bashrc" 2>/dev/null; then
+    cat >> "$HOME/.bashrc" <<'EOF'
+
+# dotfiles-gpg-agent-start
+if [ -r "$HOME/.config/shell/gpg-agent.sh" ]; then
+    . "$HOME/.config/shell/gpg-agent.sh"
+fi
+# dotfiles-gpg-agent-end
+EOF
+fi
+
 cd "$SCRIPT_DIR"
 info "Clone repositories..."
 chmod +x ./generic/clone_repositories.sh

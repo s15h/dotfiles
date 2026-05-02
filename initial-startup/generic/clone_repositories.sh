@@ -1,7 +1,9 @@
 #!/usr/bin/env zsh
 
-# Ensure zsh-based GPG/SSH agent config is loaded for git clone.
-if [[ -r "$HOME/.oh-my-zsh/custom/gpg.zsh" ]]; then
+# Ensure GPG-backed SSH agent config is loaded for git clone.
+if [[ -r "$HOME/.config/shell/gpg-agent.sh" ]]; then
+  source "$HOME/.config/shell/gpg-agent.sh"
+elif [[ -r "$HOME/.oh-my-zsh/custom/gpg.zsh" ]]; then
   source "$HOME/.oh-my-zsh/custom/gpg.zsh"
 fi
 
