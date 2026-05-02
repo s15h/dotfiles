@@ -23,3 +23,5 @@
 	path = ~/project/dignitas/.gitconfig
 [core]
 	autocrlf = input
+[color]
+	ui = auto
