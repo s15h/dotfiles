@@ -11,41 +11,45 @@ touch "$HOME/.ssh/known_hosts"
 ssh-keyscan github.com >> "$HOME/.ssh/known_hosts"
 ssh-keyscan ssh.dev.azure.com >> "$HOME/.ssh/known_hosts"
 
-# go to root level of project
-cd ~/
+WORKSPACE_DIR="$HOME/project"
+if [[ -L "$WORKSPACE_DIR" ]]; then
+  echo "[ERROR] $WORKSPACE_DIR is a symlink. Re-run preparation so repositories are cloned outside the dotfiles repo."
+  exit 1
+fi
+
+mkdir -p "$WORKSPACE_DIR"
+
+REPO_LIST_ROOT="$(mktemp -d)"
+trap 'rm -rf "$REPO_LIST_ROOT"' EXIT
 
 # clone private repositories
-git clone git@github.com:s15h/default-repositories.git
+git clone git@github.com:s15h/default-repositories.git "$REPO_LIST_ROOT/default-repositories"
 
 # get list of private from file
-REPO_LIST="$HOME/default-repositories/private.txt"
+REPO_LIST="$REPO_LIST_ROOT/default-repositories/private.txt"
 if [ ! -f "$REPO_LIST" ]; then
     echo "[ERROR] Repository list file not found: $REPO_LIST"
     exit 1
 else
-  if [ ! -d ~/project/private ]; then
-    mkdir ~/project/private
-  fi
-  cd ~/project/private
-  while read repo; do
+  mkdir -p "$WORKSPACE_DIR/private"
+  cd "$WORKSPACE_DIR/private"
+  while IFS= read -r repo; do
+    [[ -z "$repo" || "$repo" == \#* ]] && continue
     echo "Cloning $repo"
-    git clone $repo
-  done < $REPO_LIST
+    git clone "$repo"
+  done < "$REPO_LIST"
 fi
 
-REPO_LIST="$HOME/default-repositories/dignitas.txt"
+REPO_LIST="$REPO_LIST_ROOT/default-repositories/dignitas.txt"
 if [ ! -f "$REPO_LIST" ]; then
     echo "[ERROR] Repository list file not found: $REPO_LIST"
     exit 1
 else
-  if [ ! -d ~/project/dignitas ]; then
-    mkdir ~/project/dignitas
-  fi
-  cd ~/project/dignitas
-  while read repo; do
+  mkdir -p "$WORKSPACE_DIR/dignitas"
+  cd "$WORKSPACE_DIR/dignitas"
+  while IFS= read -r repo; do
+    [[ -z "$repo" || "$repo" == \#* ]] && continue
     echo "Cloning $repo"
-    git clone $repo
-  done < $REPO_LIST
+    git clone "$repo"
+  done < "$REPO_LIST"
 fi
-
-rm -rf "$HOME"/default-repositories
