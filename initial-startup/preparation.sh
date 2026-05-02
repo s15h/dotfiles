@@ -6,6 +6,8 @@ set -e
 
 # set working directory to script directory
 cd "$(dirname "$0")"
+SCRIPT_DIR="$(pwd)"
+DOTFILES_ROOT="$(cd .. && pwd)"
 
 # --- Helper Functions ---
 info() {
@@ -55,15 +57,40 @@ else
     error "Failed to import GPG key."
 fi
 
+GPG_EXPORT_DIR="$DOTFILES_ROOT/configs/gpg"
+if [ -d "$GPG_EXPORT_DIR" ]; then
+    mapfile -d '' local_gpg_exports < <(find "$GPG_EXPORT_DIR" -maxdepth 1 -type f -name '*.asc' -print0 | sort -z)
+    if [ ${#local_gpg_exports[@]} -gt 0 ]; then
+        info "Importing local GPG key updates from $GPG_EXPORT_DIR..."
+        gpg --import "${local_gpg_exports[@]}" || error "Failed to import local GPG key updates."
+    fi
+fi
+
 # --- Stow configs ---
 if [ ! -d ~/fonts ]; then
     mkdir ~/fonts
 fi
 
-cd ../
-stow -vv  -t ~ configs
+cd "$DOTFILES_ROOT"
+stow -vv -t ~ --ignore='^project$' configs
 
-cd ~/"$(dirname "$0")"
+PROJECT_CONFIG_DIR="$DOTFILES_ROOT/configs/project"
+if [ -d "$PROJECT_CONFIG_DIR" ]; then
+    if [ -L "$HOME/project" ]; then
+        info "Removing stowed ~/project symlink so repositories stay outside the dotfiles repo."
+        rm "$HOME/project"
+    fi
+
+    mkdir -p "$HOME/project"
+    for package_dir in "$PROJECT_CONFIG_DIR"/*; do
+        [ -d "$package_dir" ] || continue
+        package_name="$(basename "$package_dir")"
+        mkdir -p "$HOME/project/$package_name"
+        stow -vv -d "$PROJECT_CONFIG_DIR" -t "$HOME/project/$package_name" "$package_name"
+    done
+fi
+
+cd "$SCRIPT_DIR"
 info "Clone repositories..."
 chmod +x ./generic/clone_repositories.sh
 ./generic/clone_repositories.sh
