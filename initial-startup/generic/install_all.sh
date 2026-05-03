@@ -22,6 +22,28 @@ ensure_bun_on_path() {
   esac
 }
 
+local_bin_path() {
+  printf '%s/.local/bin/%s\n' "$HOME" "$1"
+}
+
+install_binary_from_url() {
+  local target_name="$1"
+  local download_url="$2"
+  local target_path
+  local temp_dir
+  local temp_path
+
+  ensure_local_bin_dir
+  target_path="$(local_bin_path "$target_name")"
+  temp_dir="$(mktemp -d)"
+  temp_path="$temp_dir/$target_name"
+
+  trap 'rm -rf "$temp_dir"' RETURN
+  curl -fsSL "$download_url" -o "$temp_path"
+  chmod +x "$temp_path"
+  install -m 0755 "$temp_path" "$target_path"
+}
+
 refresh_application_shortcuts() {
   mkdir -p "$HOME/.local/share/applications"
 
@@ -194,6 +216,30 @@ install_crush() {
   fi
 }
 
+install_kubectl() {
+  local kubectl_path
+
+  kubectl_path="$(local_bin_path kubectl)"
+  if command_exists kubectl || [ -x "$kubectl_path" ]; then
+    echo "kubectl already installed."
+    return 0
+  fi
+
+  install_binary_from_url kubectl "https://dl.k8s.io/release/$(curl -fsSL https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+}
+
+install_talosctl() {
+  local talosctl_path
+
+  talosctl_path="$(local_bin_path talosctl)"
+  if command_exists talosctl || [ -x "$talosctl_path" ]; then
+    echo "talosctl already installed."
+    return 0
+  fi
+
+  install_binary_from_url talosctl "https://github.com/siderolabs/talos/releases/latest/download/talosctl-linux-amd64"
+}
+
 ensure_flathub_remote
 
 install_flatpak_gui_app com.bitwarden.desktop "Bitwarden"
@@ -206,6 +252,8 @@ fi
 install_flatpak_gui_app md.obsidian.Obsidian "Obsidian"
 install_flatpak_gui_app dev.zed.Zed "Zed"
 install_crush
+install_kubectl
+install_talosctl
 refresh_application_shortcuts
 
 # install oh my zsh
