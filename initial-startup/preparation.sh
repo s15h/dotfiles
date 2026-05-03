@@ -231,6 +231,18 @@ fi
 EOF
 fi
 
+BASH_BUN_HOOK_START="# dotfiles-bun-start"
+if ! grep -qF "$BASH_BUN_HOOK_START" "$HOME/.bashrc" 2>/dev/null; then
+    cat >> "$HOME/.bashrc" <<'EOF'
+
+# dotfiles-bun-start
+if [ -r "$HOME/.config/shell/bun.sh" ]; then
+    . "$HOME/.config/shell/bun.sh"
+fi
+# dotfiles-bun-end
+EOF
+fi
+
 cd "$SCRIPT_DIR"
 info "Clone repositories..."
 chmod +x ./generic/clone_repositories.sh
