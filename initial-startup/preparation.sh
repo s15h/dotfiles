@@ -47,6 +47,9 @@ fi
 chmod +x ./generic/install_all.sh
 ./generic/install_all.sh
 
+chmod +x ./generic/configure_apps.sh
+./generic/configure_apps.sh
+
 info "Dependencies installed successfully."
 
 # --- GPG Key Import ---

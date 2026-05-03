@@ -1,41 +1,30 @@
-# install bitwarden cli
-if [ ! -f /usr/bin/bw ]; then
-  flatpak install -y flathub com.bitwarden.desktop
-else
-  echo "Bitwarden CLI already installed."
-fi
+#!/usr/bin/env bash
 
-# install bruno
-if [ ! -f /usr/bin/bruno ]; then
-  flatpak install -y flathub com.usebruno.Bruno
-else
-  echo "Bruno already installed."
-fi
+set -euo pipefail
 
-# install discord
-if [ ! -f /usr/bin/discord ]; then
-  flatpak install -y flathub com.discordapp.Discord
-else
-  echo "Discord already installed."
-fi
+install_desktop_app() {
+  local app_id="$1"
+  local label="$2"
+  local binary="${3:-}"
 
-# install firefox
-if [ ! -f /usr/bin/firefox ]; then
-  flatpak install -y flathub org.mozilla.Firefox
-else
-  echo "Firefox already installed."
-fi
+  if [ -n "$binary" ] && command -v "$binary" >/dev/null 2>&1; then
+    echo "$label already installed."
+  elif flatpak info "$app_id" >/dev/null 2>&1; then
+    echo "$label already installed."
+  else
+    flatpak install -y flathub "$app_id"
+  fi
+}
 
-#install obsidian flatpack
-if [ ! -f /usr/bin/obsidian ]; then
-  flatpak install -y flathub md.obsidian.Obsidian
-else
-  echo "Obsidian already installed."
-fi
+install_desktop_app com.bitwarden.desktop "Bitwarden"
+install_desktop_app com.usebruno.Bruno "Bruno"
+install_desktop_app org.mozilla.firefox "Firefox" firefox
+install_desktop_app md.obsidian.Obsidian "Obsidian"
+install_desktop_app dev.zed.Zed "Zed" zed
 
 # install oh my zsh
 if [ ! -d ~/.oh-my-zsh ]; then
-  print 'y\n' | RUNZSH=no \
+  printf 'y\n' | RUNZSH=no \
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 else
   echo "Oh My Zsh already installed."
