@@ -1,7 +1,8 @@
 [user]
-	signingkey = F8AC4625B9FA3451C87F620DEF527BD39924885B!
 	email = sietze@s15h.nl
 	name = Sietze van den Bergh
+[include]
+	path = ~/.config/git/signingkey.gitconfig
 [pull]
 	rebase = true
 [commit]

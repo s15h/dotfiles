@@ -8,10 +8,15 @@ set -e
 cd "$(dirname "$0")"
 SCRIPT_DIR="$(pwd)"
 DOTFILES_ROOT="$(cd .. && pwd)"
+GPG_PRIMARY_KEY_FINGERPRINT="A5396EB208B1AF337D9CCF8D462680667361F6A4"
 
 # --- Helper Functions ---
 info() {
     echo "[INFO] $1"
+}
+
+warn() {
+    echo "[WARN] $1" >&2
 }
 
 error() {
@@ -45,6 +50,95 @@ set_dotfiles_origin_to_ssh() {
 
     git -C "$DOTFILES_ROOT" remote set-url origin "$ssh_remote"
     info "Updated dotfiles origin to SSH: $ssh_remote"
+}
+
+find_active_signing_subkey() {
+    local key_listing
+
+    key_listing="$(gpg --list-secret-keys --with-colons --fingerprint "$GPG_PRIMARY_KEY_FINGERPRINT" 2>/dev/null || true)"
+    if [ -z "$key_listing" ]; then
+        key_listing="$(gpg --list-keys --with-colons --fingerprint "$GPG_PRIMARY_KEY_FINGERPRINT" 2>/dev/null || true)"
+    fi
+
+    awk -F: '
+        BEGIN {
+            best_created = -1
+            candidate = 0
+        }
+        /^(sub|ssb):/ {
+            candidate = 0
+            validity = $2
+            created = $6 + 0
+            expires = ($7 == "" ? 32503680000 : $7) + 0
+            can_sign = index($12, "s") > 0
+
+            if (validity !~ /[erdi]/ && can_sign && expires > systime()) {
+                candidate = 1
+                candidate_created = created
+            }
+
+            next
+        }
+        /^fpr:/ && candidate {
+            if (candidate_created >= best_created) {
+                best_created = candidate_created
+                best_fingerprint = $10
+            }
+
+            candidate = 0
+        }
+        END {
+            if (best_fingerprint != "") {
+                print best_fingerprint "!"
+            }
+        }
+    ' <<<"$key_listing"
+}
+
+refresh_gpg_smartcard_state() {
+    info "Refreshing GPG smartcard state..."
+
+    if command_exists gpg-connect-agent; then
+        if gpg-connect-agent "scd serialno" "learn --force" /bye >/dev/null 2>&1; then
+            if gpg --card-status >/dev/null 2>&1; then
+                info "GPG smartcard state refreshed."
+                return 0
+            fi
+        fi
+    fi
+
+    if gpg --card-status >/dev/null 2>&1; then
+        info "GPG smartcard state refreshed."
+        return 0
+    fi
+
+    warn "Could not read the GPG smartcard. Insert the YubiKey and rerun preparation if Git signing stays unavailable."
+    return 1
+}
+
+configure_git_signing_key() {
+    local signing_key
+    local signing_config_path="$HOME/.config/git/signingkey.gitconfig"
+
+    info "Configuring Git commit signing key..."
+    mkdir -p "$(dirname "$signing_config_path")"
+    signing_key="$(find_active_signing_subkey)"
+
+    if [ -z "$signing_key" ]; then
+        if [ -f "$signing_config_path" ]; then
+            warn "No usable signing subkey detected; keeping existing Git signing key config."
+        else
+            warn "No usable signing subkey detected; Git signing key was not configured."
+        fi
+        return 1
+    fi
+
+    cat >"$signing_config_path" <<EOF
+[user]
+	signingkey = $signing_key
+EOF
+
+    info "Configured Git signing key: $signing_key"
 }
 
 # --- OS Detection ---
@@ -97,6 +191,8 @@ if [ -d "$GPG_EXPORT_DIR" ]; then
     fi
 fi
 
+refresh_gpg_smartcard_state || true
+
 # --- Stow configs ---
 if [ ! -d ~/fonts ]; then
     mkdir ~/fonts
@@ -104,6 +200,7 @@ fi
 
 cd "$DOTFILES_ROOT"
 stow -vv -t ~ --ignore='^project$' configs
+configure_git_signing_key || true
 set_dotfiles_origin_to_ssh
 
 PROJECT_CONFIG_DIR="$DOTFILES_ROOT/configs/project"
