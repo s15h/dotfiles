@@ -87,7 +87,7 @@ There is a conditional include for `~/project/dignitas/` in `configs/.gitconfig`
 Observed package/app behavior:
 - Debian installer uses `apt` and then delegates Docker, Ghostty, and Spotify setup to dedicated scripts.
 - Arch installer uses `pacman` only.
-- Generic installer ensures the Flathub remote exists, then installs Bitwarden, Bruno, Firefox, Obsidian, Zed, Crush, and Oh My Zsh.
+- Generic installer ensures the Flathub remote exists, then installs Bitwarden, Bruno, Firefox, Obsidian, Zed, Crush, kubectl, talosctl, and Oh My Zsh.
 - Bitwarden CLI access is expected to come from the Flatpak app via a wrapper script named `bw` in `~/.local/bin`.
 - `generic/configure_apps.sh` also removes a set of existing apps/packages, including 1Password, Chrome, LibreOffice, Xournal++, Zoom, and several named web apps.
 
