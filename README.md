@@ -47,6 +47,15 @@ There are aliases for this available in bash_aliases but to make them work we ne
 Make sure the toolbox has writing permissions on the selected folder
 
 ## GPG key
+For Git commit signing with the YubiKey setup, point `user.signingkey` at the active signing subkey fingerprint with a trailing `!`, not at the primary certify key fingerprint.
+
+If signing starts failing with `Unusable secret key`, refresh the smartcard state first:
+```bash
+gpg --card-status
+# or
+yubikey-switch
+```
+
 ### subkey renewal
 estimated Time required: 15 minutes.
 subkey renewal only pushes expiration date forward.
