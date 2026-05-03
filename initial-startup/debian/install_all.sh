@@ -4,6 +4,7 @@ sudo apt install -y \
 chromium-browser \
 fastfetch \
 flatpak \
+gh \
 git \
 gnupg2 \
 hyprland \

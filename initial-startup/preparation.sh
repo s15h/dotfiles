@@ -109,3 +109,7 @@ cd "$SCRIPT_DIR"
 info "Clone repositories..."
 chmod +x ./generic/clone_repositories.sh
 ./generic/clone_repositories.sh
+
+info "Bootstrapping supported logins..."
+chmod +x ./generic/bootstrap_logins.sh
+./generic/bootstrap_logins.sh

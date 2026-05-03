@@ -41,6 +41,34 @@ gpgconf --launch gpg-agent
 ```
 
 ## remaining setup
+### automated service logins
+`initial-startup/preparation.sh` can optionally bootstrap supported service logins with the Bitwarden CLI after the install finishes.
+
+1. Add the services you want to automate to `~/.config/dotfiles/login-bootstrap.conf`
+2. Run the preparation script and confirm the Bitwarden bootstrap prompt
+3. Log in to or unlock the Bitwarden CLI when asked
+
+Supported automated services:
+- GitHub CLI via `gh auth login`
+- Docker registries via `docker login`
+
+The bootstrap config file supports these entry types:
+```text
+gh|<hostname>|<bitwarden item with token in the password field>
+docker|<registry>|<username>|<bitwarden item with password or token in the password field>
+```
+
+### manual logins
+These services still require manual sign-in after installation:
+
+- Bitwarden desktop
+- Firefox / Firefox Sync
+- Bruno
+- Obsidian
+- Zed
+- pi.dev
+- Spotify
+
 ### ssh in jetbrains ui
 To enable use of gpg agent in ssh actions in jetbrains ui elements we need to start up the application with the SSH_AUTH_SOCK variable set.
 There are aliases for this available in bash_aliases but to make them work we need [the toolbox to create shell scripts](https://www.jetbrains.com/help/idea/working-with-the-ide-features-from-command-line.html#generate-shell-scripts)
