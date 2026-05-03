@@ -240,6 +240,14 @@ install_talosctl() {
   install_binary_from_url talosctl "https://github.com/siderolabs/talos/releases/latest/download/talosctl-linux-amd64"
 }
 
+install_zenkit_web_app() {
+  if command_exists omarchy-webapp-install; then
+    omarchy-webapp-install "zenkit" https://app.zenkit.com "https://www.google.com/s2/favicons?domain=https://app.zenkit.com&sz=128"
+  else
+    echo "omarchy-webapp-install not available; skipping zenkit web app."
+  fi
+}
+
 ensure_flathub_remote
 
 install_flatpak_gui_app com.bitwarden.desktop "Bitwarden"
@@ -254,6 +262,7 @@ install_flatpak_gui_app dev.zed.Zed "Zed"
 install_crush
 install_kubectl
 install_talosctl
+install_zenkit_web_app
 refresh_application_shortcuts
 
 # install oh my zsh
