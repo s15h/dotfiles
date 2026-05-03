@@ -19,6 +19,34 @@ error() {
     exit 1
 }
 
+set_dotfiles_origin_to_ssh() {
+    local current_remote ssh_remote
+
+    if ! git -C "$DOTFILES_ROOT" config user.signingkey >/dev/null 2>&1; then
+        return 0
+    fi
+
+    if ! current_remote="$(git -C "$DOTFILES_ROOT" remote get-url origin 2>/dev/null)"; then
+        return 0
+    fi
+
+    case "$current_remote" in
+        git@github.com:*)
+            return 0
+            ;;
+        https://github.com/*)
+            ssh_remote="${current_remote#https://github.com/}"
+            ssh_remote="git@github.com:${ssh_remote}"
+            ;;
+        *)
+            return 0
+            ;;
+    esac
+
+    git -C "$DOTFILES_ROOT" remote set-url origin "$ssh_remote"
+    info "Updated dotfiles origin to SSH: $ssh_remote"
+}
+
 # --- OS Detection ---
 if [ -f /etc/os-release ]; then
     # freedesktop.org and systemd
@@ -76,6 +104,7 @@ fi
 
 cd "$DOTFILES_ROOT"
 stow -vv -t ~ --ignore='^project$' configs
+set_dotfiles_origin_to_ssh
 
 PROJECT_CONFIG_DIR="$DOTFILES_ROOT/configs/project"
 if [ -d "$PROJECT_CONFIG_DIR" ]; then
