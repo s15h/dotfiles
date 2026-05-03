@@ -1,6 +1,5 @@
 sudo pacman -Syu --noconfirm --needed \
   ccid \
-  discord \
   docker \
   fastfetch \
   firefox \
@@ -19,4 +18,3 @@ sudo pacman -Syu --noconfirm --needed \
   yubikey-manager \
   yubikey-personalization \
   zsh
-

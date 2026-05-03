@@ -3,6 +3,7 @@ sudo apt update
 sudo apt install -y \
 chromium-browser \
 fastfetch \
+flatpak \
 git \
 gnupg2 \
 hyprland \
