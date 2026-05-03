@@ -10,7 +10,6 @@ step 1: `git clone https://github.com/s15h/dotfiles.git`
 step 2: `dotfiles/initial-startup/preperation.sh`
 
 ## todo
-- [ ] Add cloning games/s15h repositories
 - [ ] Add dotfiles for openvpn
 - ~/.openvpn/template-vpn.sh
 

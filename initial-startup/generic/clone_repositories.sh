@@ -55,3 +55,25 @@ else
     git clone "$repo"
   done < "$REPO_LIST"
 fi
+
+REPO_LIST="$REPO_LIST_ROOT/default-repositories/s15h.txt"
+if [ -f "$REPO_LIST" ]; then
+  mkdir -p "$WORKSPACE_DIR/s15h"
+  cd "$WORKSPACE_DIR/s15h"
+  while IFS= read -r repo; do
+    [[ -z "$repo" || "$repo" == \#* ]] && continue
+    echo "Cloning $repo"
+    git clone "$repo"
+  done < "$REPO_LIST"
+fi
+
+REPO_LIST="$REPO_LIST_ROOT/default-repositories/games.txt"
+if [ -f "$REPO_LIST" ]; then
+  mkdir -p "$WORKSPACE_DIR/games"
+  cd "$WORKSPACE_DIR/games"
+  while IFS= read -r repo; do
+    [[ -z "$repo" || "$repo" == \#* ]] && continue
+    echo "Cloning $repo"
+    git clone "$repo"
+  done < "$REPO_LIST"
+fi
