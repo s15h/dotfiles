@@ -77,6 +77,8 @@ Make sure the toolbox has writing permissions on the selected folder
 ## GPG key
 For Git commit signing with the YubiKey setup, point `user.signingkey` at the active signing subkey fingerprint with a trailing `!`, not at the primary certify key fingerprint.
 
+`initial-startup/preparation.sh` now refreshes the smartcard state and writes `~/.config/git/signingkey.gitconfig` with the newest usable signing subkey automatically on install.
+
 If signing starts failing with `Unusable secret key`, refresh the smartcard state first:
 ```bash
 gpg --card-status
