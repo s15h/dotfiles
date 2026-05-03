@@ -5,6 +5,7 @@ sudo pacman -Syu --noconfirm --needed \
   firefox \
   flatpak \
   git \
+  github-cli \
   gnupg \
   neovim \
   openvpn \
