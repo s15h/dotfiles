@@ -42,43 +42,6 @@ find_desktop_entry() {
   return 1
 }
 
-install_web_launcher() {
-  local app_name="$1"
-  local app_url="$2"
-  local icon_url="$3"
-  local applications_dir="$HOME/.local/share/applications"
-  local icon_dir="$applications_dir/icons"
-  local icon_path="$icon_dir/$app_name.png"
-  local desktop_file="$applications_dir/$app_name.desktop"
-
-  mkdir -p "$applications_dir" "$icon_dir"
-  curl -fsSL -o "$icon_path" "$icon_url"
-
-  cat >"$desktop_file" <<EOF
-[Desktop Entry]
-Version=1.0
-Name=$app_name
-Comment=$app_name
-Exec=xdg-open $app_url
-Terminal=false
-Type=Application
-Icon=$icon_path
-StartupNotify=true
-EOF
-
-  chmod +x "$desktop_file"
-}
-
-install_pi_dev() {
-  local icon_url="https://www.google.com/s2/favicons?domain=pi.dev&sz=128"
-
-  if command_exists omarchy-webapp-install; then
-    omarchy-webapp-install "pi.dev" "https://pi.dev" "$icon_url"
-  else
-    install_web_launcher "pi.dev" "https://pi.dev" "$icon_url"
-  fi
-}
-
 set_firefox_as_default_browser() {
   local firefox_desktop
 
@@ -206,7 +169,6 @@ refresh_application_shortcuts() {
   fi
 }
 
-install_pi_dev
 set_firefox_as_default_browser
 set_bitwarden_as_default_password_manager
 
@@ -237,6 +199,7 @@ remove_web_apps \
   "Google Messages" \
   "Google Photos" \
   "HEY" \
+  "pi.dev" \
   "WhatsApp" \
   "X" \
   "Zoom"

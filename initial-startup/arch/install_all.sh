@@ -14,6 +14,7 @@ sudo pacman -Syu --noconfirm --needed \
   pinentry \
   stow \
   tmux \
+  unzip \
   waybar \
   wofi \
   yubikey-manager \

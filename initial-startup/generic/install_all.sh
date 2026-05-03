@@ -6,6 +6,22 @@ command_exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
+ensure_local_bin_dir() {
+  mkdir -p "$HOME/.local/bin"
+}
+
+ensure_bun_on_path() {
+  export BUN_INSTALL="${BUN_INSTALL:-$HOME/.bun}"
+
+  case ":$PATH:" in
+    *":$BUN_INSTALL/bin:"*)
+      ;;
+    *)
+      export PATH="$BUN_INSTALL/bin:$PATH"
+      ;;
+  esac
+}
+
 refresh_application_shortcuts() {
   mkdir -p "$HOME/.local/share/applications"
 
@@ -142,6 +158,42 @@ install_desktop_app() {
   install_flatpak_app "$app_id" "$label"
 }
 
+install_bun() {
+  local bun_bin="$HOME/.bun/bin/bun"
+
+  if command_exists bun || [ -x "$bun_bin" ]; then
+    ensure_bun_on_path
+    echo "Bun already installed."
+    return 0
+  fi
+
+  curl -fsSL https://bun.sh/install | bash
+  ensure_bun_on_path
+}
+
+cleanup_legacy_pi_install() {
+  rm -f "$HOME/.local/bin/pi"
+  rm -f "$HOME/.local/bin/pi-ai"
+  rm -f "$HOME/.local/share/applications/pi-ai.desktop"
+  rm -rf "$HOME/.local/share/pi-ai"
+
+  ensure_bun_on_path
+  if command_exists bun; then
+    bun remove -g @mariozechner/pi-coding-agent >/dev/null 2>&1 || true
+  fi
+}
+
+install_crush() {
+  install_bun
+  cleanup_legacy_pi_install
+
+  if command_exists omarchy-npx-install; then
+    omarchy-npx-install @charmland/crush crush
+  else
+    bun add -g @charmland/crush >/dev/null
+  fi
+}
+
 ensure_flathub_remote
 
 install_flatpak_gui_app com.bitwarden.desktop "Bitwarden"
@@ -153,6 +205,7 @@ if flatpak info org.mozilla.firefox >/dev/null 2>&1; then
 fi
 install_flatpak_gui_app md.obsidian.Obsidian "Obsidian"
 install_flatpak_gui_app dev.zed.Zed "Zed"
+install_crush
 refresh_application_shortcuts
 
 # install oh my zsh

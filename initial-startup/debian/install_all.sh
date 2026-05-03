@@ -16,6 +16,7 @@ pinentry-tty \
 openssh-client \
 stow \
 tmux \
+unzip \
 waybar \
 yubikey-manager \
 zsh

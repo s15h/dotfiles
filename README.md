@@ -66,7 +66,6 @@ These services still require manual sign-in after installation:
 - Bruno
 - Obsidian
 - Zed
-- pi.dev
 - Spotify
 
 ### ssh in jetbrains ui
