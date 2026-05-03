@@ -1,5 +1,10 @@
 #!/bin/bash
 # This script prepares a new system to use a YubiKey with GnuPG for SSH authentication.
+# Run without arguments to execute all steps.
+# Run with one or more step names to execute only those steps:
+#   ./preparation.sh install_os_packages install_generic_packages
+#   ./preparation.sh stow_configs
+#   ./preparation.sh import_gpg_keys clone_repositories
 
 # Exit immediately if a command exits with a non-zero status.
 set -e
@@ -22,6 +27,10 @@ warn() {
 error() {
     echo "[ERROR] $1" >&2
     exit 1
+}
+
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
 }
 
 set_dotfiles_origin_to_ssh() {
@@ -141,87 +150,106 @@ EOF
     info "Configured Git signing key: $signing_key"
 }
 
-# --- OS Detection ---
-if [ -f /etc/os-release ]; then
-    # freedesktop.org and systemd
-    . /etc/os-release
-    OS=$ID
-    ID_LIKE=${ID_LIKE:-}
-else
-    error "Cannot detect operating system."
-fi
+# --- Step Functions ---
 
-# --- Package Installation ---
-info "Detecting package manager and installing dependencies..."
-
-if [[ "$OS" == "arch" || "$ID_LIKE" == "arch" ]]; then
-    info "Arch Linux detected."
-    chmod +x ./arch/install_all.sh
-    ./arch/install_all.sh
-elif [[ "$OS" == "debian" || "$OS" == "ubuntu" || "$ID_LIKE" == "debian" || "$ID_LIKE" == "ubuntu" ]]; then
-    info "Debian-based system detected."
-    chmod +x ./debian/install_all.sh
-    ./debian/install_all.sh
-else
-    error "Unsupported operating system: $OS"
-fi
-
-chmod +x ./generic/install_all.sh
-./generic/install_all.sh
-
-chmod +x ./generic/configure_apps.sh
-./generic/configure_apps.sh
-
-info "Dependencies installed successfully."
-
-# --- GPG Key Import ---
-info "Importing GPG public key from https://github.com/s15h.gpg..."
-if curl -sL https://github.com/s15h.gpg | gpg --import -; then
-    info "GPG key imported successfully."
-else
-    error "Failed to import GPG key."
-fi
-
-GPG_EXPORT_DIR="$DOTFILES_ROOT/configs/gpg"
-if [ -d "$GPG_EXPORT_DIR" ]; then
-    mapfile -d '' local_gpg_exports < <(find "$GPG_EXPORT_DIR" -maxdepth 1 -type f -name '*.asc' -print0 | sort -z)
-    if [ ${#local_gpg_exports[@]} -gt 0 ]; then
-        info "Importing local GPG key updates from $GPG_EXPORT_DIR..."
-        gpg --import "${local_gpg_exports[@]}" || error "Failed to import local GPG key updates."
+detect_os() {
+    if [ -f /etc/os-release ]; then
+        # freedesktop.org and systemd
+        . /etc/os-release
+        OS=$ID
+        ID_LIKE=${ID_LIKE:-}
+    else
+        error "Cannot detect operating system."
     fi
-fi
+}
 
-refresh_gpg_smartcard_state || true
+install_os_packages() {
+    info "Installing OS-specific packages..."
 
-# --- Stow configs ---
-if [ ! -d ~/fonts ]; then
-    mkdir ~/fonts
-fi
-
-cd "$DOTFILES_ROOT"
-stow -vv -t ~ --ignore='^project$' configs
-configure_git_signing_key || true
-set_dotfiles_origin_to_ssh
-
-PROJECT_CONFIG_DIR="$DOTFILES_ROOT/configs/project"
-if [ -d "$PROJECT_CONFIG_DIR" ]; then
-    if [ -L "$HOME/project" ]; then
-        info "Removing stowed ~/project symlink so repositories stay outside the dotfiles repo."
-        rm "$HOME/project"
+    if [[ "$OS" == "arch" || "$ID_LIKE" == "arch" ]]; then
+        info "Arch Linux detected."
+        chmod +x ./arch/install_all.sh
+        ./arch/install_all.sh
+    elif [[ "$OS" == "debian" || "$OS" == "ubuntu" || "$ID_LIKE" == "debian" || "$ID_LIKE" == "ubuntu" ]]; then
+        info "Debian-based system detected."
+        chmod +x ./debian/install_all.sh
+        ./debian/install_all.sh
+    else
+        error "Unsupported operating system: $OS"
     fi
 
-    mkdir -p "$HOME/project"
-    for package_dir in "$PROJECT_CONFIG_DIR"/*; do
-        [ -d "$package_dir" ] || continue
-        package_name="$(basename "$package_dir")"
-        mkdir -p "$HOME/project/$package_name"
-        stow -vv -d "$PROJECT_CONFIG_DIR" -t "$HOME/project/$package_name" "$package_name"
-    done
-fi
+    info "OS-specific packages installed."
+}
 
-BASH_GPG_HOOK_START="# dotfiles-gpg-agent-start"
-if ! grep -qF "$BASH_GPG_HOOK_START" "$HOME/.bashrc" 2>/dev/null; then
-    cat >> "$HOME/.bashrc" <<'EOF'
+install_generic_packages() {
+    info "Installing generic packages..."
+
+    chmod +x ./generic/install_all.sh
+    ./generic/install_all.sh
+
+    chmod +x ./generic/configure_apps.sh
+    ./generic/configure_apps.sh
+
+    info "Generic packages installed."
+}
+
+import_gpg_keys() {
+    info "Importing GPG public key from https://github.com/s15h.gpg..."
+    if curl -sL https://github.com/s15h.gpg | gpg --import -; then
+        info "GPG key imported successfully."
+    else
+        error "Failed to import GPG key."
+    fi
+
+    GPG_EXPORT_DIR="$DOTFILES_ROOT/configs/gpg"
+    if [ -d "$GPG_EXPORT_DIR" ]; then
+        mapfile -d '' local_gpg_exports < <(find "$GPG_EXPORT_DIR" -maxdepth 1 -type f -name '*.asc' -print0 | sort -z)
+        if [ ${#local_gpg_exports[@]} -gt 0 ]; then
+            info "Importing local GPG key updates from $GPG_EXPORT_DIR..."
+            gpg --import "${local_gpg_exports[@]}" || error "Failed to import local GPG key updates."
+        fi
+    fi
+
+    refresh_gpg_smartcard_state || true
+}
+
+stow_configs() {
+    info "Stowing configs..."
+
+    if [ ! -d ~/fonts ]; then
+        mkdir ~/fonts
+    fi
+
+    cd "$DOTFILES_ROOT"
+    stow -vv -t ~ --ignore='^project$' configs
+    configure_git_signing_key || true
+    set_dotfiles_origin_to_ssh
+
+    PROJECT_CONFIG_DIR="$DOTFILES_ROOT/configs/project"
+    if [ -d "$PROJECT_CONFIG_DIR" ]; then
+        if [ -L "$HOME/project" ]; then
+            info "Removing stowed ~/project symlink so repositories stay outside the dotfiles repo."
+            rm "$HOME/project"
+        fi
+
+        mkdir -p "$HOME/project"
+        for package_dir in "$PROJECT_CONFIG_DIR"/*; do
+            [ -d "$package_dir" ] || continue
+            package_name="$(basename "$package_dir")"
+            mkdir -p "$HOME/project/$package_name"
+            stow -vv -d "$PROJECT_CONFIG_DIR" -t "$HOME/project/$package_name" "$package_name"
+        done
+    fi
+
+    append_bash_hooks
+
+    info "Configs stowed."
+}
+
+append_bash_hooks() {
+    BASH_GPG_HOOK_START="# dotfiles-gpg-agent-start"
+    if ! grep -qF "$BASH_GPG_HOOK_START" "$HOME/.bashrc" 2>/dev/null; then
+        cat >> "$HOME/.bashrc" <<'EOF'
 
 # dotfiles-gpg-agent-start
 if [ -r "$HOME/.config/shell/gpg-agent.sh" ]; then
@@ -229,11 +257,11 @@ if [ -r "$HOME/.config/shell/gpg-agent.sh" ]; then
 fi
 # dotfiles-gpg-agent-end
 EOF
-fi
+    fi
 
-BASH_BUN_HOOK_START="# dotfiles-bun-start"
-if ! grep -qF "$BASH_BUN_HOOK_START" "$HOME/.bashrc" 2>/dev/null; then
-    cat >> "$HOME/.bashrc" <<'EOF'
+    BASH_BUN_HOOK_START="# dotfiles-bun-start"
+    if ! grep -qF "$BASH_BUN_HOOK_START" "$HOME/.bashrc" 2>/dev/null; then
+        cat >> "$HOME/.bashrc" <<'EOF'
 
 # dotfiles-bun-start
 if [ -r "$HOME/.config/shell/bun.sh" ]; then
@@ -241,13 +269,56 @@ if [ -r "$HOME/.config/shell/bun.sh" ]; then
 fi
 # dotfiles-bun-end
 EOF
-fi
+    fi
+}
 
-cd "$SCRIPT_DIR"
-info "Clone repositories..."
-chmod +x ./generic/clone_repositories.sh
-./generic/clone_repositories.sh
+clone_repositories() {
+    cd "$SCRIPT_DIR"
+    info "Cloning repositories..."
+    chmod +x ./generic/clone_repositories.sh
+    ./generic/clone_repositories.sh
+}
 
-info "Bootstrapping supported logins..."
-chmod +x ./generic/bootstrap_logins.sh
-./generic/bootstrap_logins.sh
+bootstrap_logins() {
+    cd "$SCRIPT_DIR"
+    info "Bootstrapping supported logins..."
+    chmod +x ./generic/bootstrap_logins.sh
+    ./generic/bootstrap_logins.sh
+}
+
+# --- Main ---
+main() {
+    detect_os
+
+    if [ $# -eq 0 ]; then
+        # Run all steps (default behavior, backward-compatible)
+        install_os_packages
+        install_generic_packages
+        import_gpg_keys
+        stow_configs
+        clone_repositories
+        bootstrap_logins
+    else
+        # Run only the requested steps
+        for step in "$@"; do
+            case "$step" in
+                detect_os)           ;;
+                install_os_packages)     install_os_packages ;;
+                install_generic_packages) install_generic_packages ;;
+                import_gpg_keys)         import_gpg_keys ;;
+                stow_configs)            stow_configs ;;
+                clone_repositories)      clone_repositories ;;
+                bootstrap_logins)        bootstrap_logins ;;
+                *)
+                    echo "Unknown step: $step" >&2
+                    echo "Available steps: detect_os install_os_packages install_generic_packages import_gpg_keys stow_configs clone_repositories bootstrap_logins" >&2
+                    exit 1
+                    ;;
+            esac
+        done
+    fi
+
+    info "Preparation complete."
+}
+
+main "$@"
