@@ -25,9 +25,6 @@ step 2: `dotfiles/initial-startup/preperation.sh`
     - own git config
 - s15h
     - open-gtd
-- games
-    - howtoavoidmeetings
-    - openraam
 
 ## Yubikey ssh
 To use yubikey as ssh this is added in the .zshrc
