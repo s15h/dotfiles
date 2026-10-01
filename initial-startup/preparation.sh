@@ -150,6 +150,33 @@ EOF
     info "Configured Git signing key: $signing_key"
 }
 
+configure_work_git_identity() {
+    local identity_config_path="$HOME/.config/git/dignitas-identity.gitconfig"
+    local work_email="${DIGNITAS_GIT_EMAIL:-}"
+
+    if [ -z "$work_email" ] && [ -t 0 ] && [ -t 1 ]; then
+        printf "Dignitas work email (leave empty to skip): "
+        read -r work_email || work_email=""
+    fi
+
+    if [ -z "$work_email" ]; then
+        if [ -f "$identity_config_path" ]; then
+            info "Keeping existing Dignitas identity config."
+        else
+            warn "No Dignitas work email provided; commits under ~/project/dignitas will use the global identity."
+        fi
+        return 0
+    fi
+
+    mkdir -p "$(dirname "$identity_config_path")"
+    cat >"$identity_config_path" <<EOF
+[user]
+	email = $work_email
+EOF
+
+    info "Configured Dignitas work email in $identity_config_path"
+}
+
 # --- Step Functions ---
 
 detect_os() {
@@ -223,6 +250,7 @@ stow_configs() {
     cd "$DOTFILES_ROOT"
     stow -vv -t ~ --ignore='^project$' configs
     configure_git_signing_key || true
+    configure_work_git_identity
     set_dotfiles_origin_to_ssh
 
     PROJECT_CONFIG_DIR="$DOTFILES_ROOT/configs/project"

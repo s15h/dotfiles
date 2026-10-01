@@ -1,3 +1,18 @@
+# Dignitas work identity.
+#
+# This file is tracked in a public repository, so the work email is
+# deliberately NOT stored here. It lives in the untracked local file
+# ~/.config/git/dignitas-identity.gitconfig, which preparation.sh creates
+# (or you can create it yourself):
+#
+#   [user]
+#       email = you@dignitas.nl
+#
+# If that file is missing, git silently falls back to your global identity
+# from ~/.gitconfig.
+
 [user]
-	email = redacted@example.invalid
 	name = Sietze van den Bergh
+
+[include]
+	path = ~/.config/git/dignitas-identity.gitconfig

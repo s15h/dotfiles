@@ -26,6 +26,21 @@ step 2: `dotfiles/initial-startup/preperation.sh`
 - s15h
     - open-gtd
 
+## Git identities
+`~/.gitconfig` (stowed from `configs/.gitconfig`) sets your global identity and switches to the Dignitas identity for anything under `~/project/dignitas/`.
+
+The Dignitas work email is intentionally **not** committed to this public repository. It lives in the untracked local file `~/.config/git/dignitas-identity.gitconfig`, which the stowed `~/project/dignitas/.gitconfig` includes:
+
+```bash
+mkdir -p ~/.config/git
+cat > ~/.config/git/dignitas-identity.gitconfig <<'EOF'
+[user]
+	email = you@dignitas.nl
+EOF
+```
+
+`preparation.sh` creates this file for you — set `DIGNITAS_GIT_EMAIL` or answer the prompt. If it is missing, git safely falls back to your global identity.
+
 ## Yubikey ssh
 To use yubikey as ssh the GPG agent is configured via two scripts:
 - `~/.config/shell/gpg-agent.sh` — sourced from `~/.bashrc` and `~/.oh-my-zsh/custom/gpg.zsh` for interactive shells.
