@@ -27,14 +27,9 @@ step 2: `dotfiles/initial-startup/preperation.sh`
     - open-gtd
 
 ## Yubikey ssh
-To use yubikey as ssh this is added in the .zshrc
-
-```
-export GPG_TTY="$(tty)"
-SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-export SSH_AUTH_SOCK
-gpgconf --launch gpg-agent
-```
+To use yubikey as ssh the GPG agent is configured via two scripts:
+- `~/.config/shell/gpg-agent.sh` — sourced from `~/.bashrc` and `~/.oh-my-zsh/custom/gpg.zsh` for interactive shells.
+- `~/.config/shell/gpg-agent-profile.sh` — sourced from `~/.bash_profile` and `~/.profile` so the graphical login session exports `SSH_AUTH_SOCK` for GUI apps.
 
 ## remaining setup
 ### automated service logins
@@ -65,9 +60,18 @@ These services still require manual sign-in after installation:
 - Spotify
 
 ### ssh in jetbrains ui
-To enable use of gpg agent in ssh actions in jetbrains ui elements we need to start up the application with the SSH_AUTH_SOCK variable set.
-There are aliases for this available in bash_aliases but to make them work we need [the toolbox to create shell scripts](https://www.jetbrains.com/help/idea/working-with-the-ide-features-from-command-line.html#generate-shell-scripts)
-Make sure the toolbox has writing permissions on the selected folder
+To enable use of gpg agent in ssh actions in jetbrains ui elements we need the SSH_AUTH_SOCK variable set.
+
+The graphical login session already exports `SSH_AUTH_SOCK` (see [Yubikey ssh](#yubikey-ssh)), so IDEs launched from the desktop work too. The aliases below are a convenience/fallback for launching from a shell.
+
+Aliases that launch JetBrains IDEs with the correct environment are available in:
+- **bash**: `~/.config/shell/jetbrains.sh` (sourced from `~/.bashrc`)
+- **zsh**: `~/.oh-my-zsh/custom/aliases.zsh`
+
+Available aliases: `intellij-ssh`, `goland-ssh`, `phpstorm-ssh`, `pycharm-ssh`, `webstorm-ssh`, `datagrip-ssh`
+
+To make them work you need [the toolbox to create shell scripts](https://www.jetbrains.com/help/idea/working-with-the-ide-features-from-command-line.html#generate-shell-scripts).
+Make sure the toolbox has writing permissions on the selected folder.
 
 ## GPG key
 For Git commit signing with the YubiKey setup, point `user.signingkey` at the active signing subkey fingerprint with a trailing `!`, not at the primary certify key fingerprint.

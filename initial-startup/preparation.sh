@@ -242,6 +242,7 @@ stow_configs() {
     fi
 
     append_bash_hooks
+    append_profile_hooks
 
     info "Configs stowed."
 }
@@ -268,6 +269,47 @@ if [ -r "$HOME/.config/shell/bun.sh" ]; then
     . "$HOME/.config/shell/bun.sh"
 fi
 # dotfiles-bun-end
+EOF
+    fi
+
+    BASH_JETBRAINS_HOOK_START="# dotfiles-jetbrains-start"
+    if ! grep -qF "$BASH_JETBRAINS_HOOK_START" "$HOME/.bashrc" 2>/dev/null; then
+        cat >> "$HOME/.bashrc" <<'EOF'
+
+# dotfiles-jetbrains-start
+if [ -r "$HOME/.config/shell/jetbrains.sh" ]; then
+    . "$HOME/.config/shell/jetbrains.sh"
+fi
+# dotfiles-jetbrains-end
+EOF
+    fi
+}
+
+append_profile_hooks() {
+    PROFILE_GPG_HOOK_START="# dotfiles-gpg-agent-profile-start"
+    if ! grep -qF "$PROFILE_GPG_HOOK_START" "$HOME/.profile" 2>/dev/null; then
+        cat >> "$HOME/.profile" <<'EOF'
+
+# dotfiles-gpg-agent-profile-start
+if [ -r "$HOME/.config/shell/gpg-agent-profile.sh" ]; then
+    . "$HOME/.config/shell/gpg-agent-profile.sh"
+fi
+# dotfiles-gpg-agent-profile-end
+EOF
+    fi
+
+    # Bash login shells read ~/.bash_profile and ignore ~/.profile, and display
+    # managers start the graphical session through a login shell (SDDM runs
+    # `bash --login`). Exporting here puts SSH_AUTH_SOCK into the session
+    # environment so GUI-launched apps (e.g. JetBrains IDEs) reach the GPG agent.
+    if ! grep -qF "$PROFILE_GPG_HOOK_START" "$HOME/.bash_profile" 2>/dev/null; then
+        cat >> "$HOME/.bash_profile" <<'EOF'
+
+# dotfiles-gpg-agent-profile-start
+if [ -r "$HOME/.config/shell/gpg-agent-profile.sh" ]; then
+    . "$HOME/.config/shell/gpg-agent-profile.sh"
+fi
+# dotfiles-gpg-agent-profile-end
 EOF
     fi
 }
